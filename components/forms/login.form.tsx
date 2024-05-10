@@ -5,32 +5,33 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
-import { CreateUser } from "@/server/user.api"
+import { CreateUser, SignIn } from "@/server/user.api"
 import { useToast } from "../ui/use-toast"
 import { ROUTES } from "@/lib/routes"
-import { redirect } from "next/navigation"
+import { signIn } from "@/lib/auth"
+import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
-    firstName: z.string().min(2).max(50),
-    lastName: z.string().min(2).max(50),
     email: z.string().email(),
     password: z.string().min(8),
 })
-export const RegisterForm = () => {
+export const LoginForm = () => {
     const { toast } = useToast()
+    const router = useRouter()
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     })
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        const response = await CreateUser(values);
+        const response = await SignIn(values)
+
         if (response.success) {
             toast({
-                title: "Account created",
-                description: "You can now sign in",
+                title: "Sucessfully signed in",
                 variant: "success"
             });
-            redirect(ROUTES.login);
+            router.push(ROUTES.dashboard)
         }
         else {
             toast({
@@ -42,34 +43,6 @@ export const RegisterForm = () => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <div className="flex flex-row gap-4">
-                    <FormField
-                        control={form.control}
-                        name="firstName"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>First name</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="John" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="lastName"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Last name</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Doe" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
                 <FormField
                     control={form.control}
                     name="email"
@@ -97,7 +70,7 @@ export const RegisterForm = () => {
                     )}
                 />
                 <Button type="submit" className="w-full" loading={form?.formState?.isSubmitting}>
-                    Create an account
+                    Sign in
                 </Button>
             </form>
         </Form>

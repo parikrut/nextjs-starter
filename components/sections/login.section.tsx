@@ -5,25 +5,25 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { RegisterForm } from "../forms/register.form"
 import Link from "next/link"
 import { ROUTES } from "@/lib/routes"
+import { LoginForm } from "../forms/login.form"
 
-export const RegisterSection = () => {
+export const LoginSection = () => {
     return (
         <Card className="mx-auto min-w-96">
             <CardHeader>
-                <CardTitle className="text-xl">Sign Up</CardTitle>
+                <CardTitle className="text-xl">Sign in</CardTitle>
                 <CardDescription>
-                    Enter your information to create an account
+                    Enter your information to sign in
                 </CardDescription>
             </CardHeader>
             <CardContent>
-                <RegisterForm />
+                <LoginForm />
                 <div className="mt-4 text-center text-sm">
-                    Already have an account?{" "}
-                    <Link href={ROUTES.login} className="underline">
-                        Sign in
+                    Forgot your password?{" "}
+                    <Link href={ROUTES.forgotPassword} className="underline">
+                        Reset it here
                     </Link>
                 </div>
             </CardContent>

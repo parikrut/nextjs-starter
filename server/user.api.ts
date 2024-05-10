@@ -1,11 +1,38 @@
 "use server"
+import { signIn, signOut } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import { IResponse } from '@/types/common';
+import { ROUTES } from '@/lib/routes';
+import { GetAllParams, IResponse } from '@/types/common';
 import { User } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
 
-export const CreateUser = async (data: Pick<User, "first_name" | "last_name" | "email" | "password">): Promise<IResponse<User>> => {
-    const { first_name, last_name, email, password } = data;
+export const SignOut = async () => {
+    await signOut({
+        redirectTo: ROUTES.login
+    });
+}
+
+export const SignIn = async (data: Pick<User, | "email" | "password">): Promise<IResponse<null>> => {
+    try {
+        await signIn("credentials", {
+            email: data.email,
+            password: data.password,
+            redirect: false,
+        });
+        return {
+            success: true,
+            data: null
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: "Failed to sign in"
+        }
+    }
+}
+
+export const CreateUser = async (data: Pick<User, "firstName" | "lastName" | "email" | "password">): Promise<IResponse<User>> => {
+    const { firstName, lastName, email, password } = data;
     let salt = genSaltSync(10);
     let hash = hashSync(password, salt);
 
@@ -20,8 +47,8 @@ export const CreateUser = async (data: Pick<User, "first_name" | "last_name" | "
     try {
         let user = await prisma.user.create({
             data: {
-                first_name,
-                last_name,
+                firstName,
+                lastName,
                 email,
                 password: hash
             }
@@ -42,7 +69,7 @@ export const CreateUser = async (data: Pick<User, "first_name" | "last_name" | "
 
 export const GetUserByEmail = async (email: string): Promise<IResponse<User>> => {
     try {
-        let user = await prisma.user.findUnique({
+        const user = await prisma.user.findUnique({
             where: {
                 email
             }
@@ -61,9 +88,39 @@ export const GetUserByEmail = async (email: string): Promise<IResponse<User>> =>
         }
     }
     catch (err) {
+        console.log(err);
         return {
             success: false,
             message: "Failed to get user"
+        }
+    }
+}
+
+export const GetAllUsers = async ({ page = 1, limit = 10 }: GetAllParams): Promise<IResponse<User[]>> => {
+    // Remove this line when you add the actual implementation
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    try {
+        const users = await prisma.user.findMany({
+            skip: (page - 1) * limit,
+            take: limit,
+            orderBy: {
+                createdAt: 'desc'
+            }
+        });
+
+        const count = await prisma.user.count();
+
+        return {
+            success: true,
+            data: users,
+            pages: Math.ceil(count / limit)
+        }
+    }
+    catch (err) {
+        return {
+            success: false,
+            message: "Failed to get users"
         }
     }
 }
