@@ -148,6 +148,34 @@ export const GetUserById = async (id: string): Promise<IResponse<User>> => {
     }
 }
 
+export const GetUserByUniqueId = async (uniqueId: string): Promise<IResponse<User>> => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                uniqueId
+            }
+        });
+
+        if (!user) {
+            return {
+                success: false,
+                message: "User not found"
+            }
+        }
+
+        return {
+            success: true,
+            data: user
+        }
+    }
+    catch (err) {
+        return {
+            success: false,
+            message: "Failed to get user"
+        }
+    }
+}
+
 export const GetAllUsers = async ({ page = 1, limit = 10 }: GetAllParams): Promise<IResponse<User[]>> => {
     // Remove this line when you add the actual implementation
     await new Promise(resolve => setTimeout(resolve, 1000));

@@ -8,6 +8,7 @@ import {
 import { RegisterForm } from "../forms/register.form"
 import Link from "next/link"
 import { ROUTES } from "@/lib/routes"
+import { Button } from "../ui/button"
 
 export const RegisterSection = () => {
     return (

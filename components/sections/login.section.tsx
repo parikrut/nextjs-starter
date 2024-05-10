@@ -8,6 +8,7 @@ import {
 import Link from "next/link"
 import { ROUTES } from "@/lib/routes"
 import { LoginForm } from "../forms/login.form"
+import { Button } from "../ui/button"
 
 export const LoginSection = () => {
     return (
@@ -24,6 +25,12 @@ export const LoginSection = () => {
                     Forgot your password?{" "}
                     <Link href={ROUTES.forgotPassword} className="underline">
                         Reset it here
+                    </Link>
+                </div>
+                <div className="mt-4 text-center text-sm">
+                    Don't have an account?{" "}
+                    <Link href={ROUTES.register} className="underline">
+                        Sign up
                     </Link>
                 </div>
             </CardContent>
