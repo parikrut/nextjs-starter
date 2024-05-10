@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { SessionProvider } from "next-auth/react";
 import { Providers } from "@/context/providers";
 import { auth } from "@/lib/auth";
+import { GetUserByEmail } from "@/server/user.api";
+import { Session } from "next-auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +22,11 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
-  console.log({ session })
+  // const user = session?.user && await GetUserByEmail(session?.user?.email);
+  // const userSession: Session = {
+  //   expires: session?.expires ?? null,
+  //   user: user?.success ? user.data : null,
+  // }
   return (
     <html lang="en">
       <body className={inter.className}>
