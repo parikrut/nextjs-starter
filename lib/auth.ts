@@ -46,21 +46,5 @@ export const {
 
             return true;
         },
-        // async jwt({ token }) {
-        //     console.log({
-        //         token
-        //     })
-        //     const user = token?.email && await GetUserByEmail(token.email);
-        //     token.user = user && user?.success && user?.data as User;
-        //     return token;
-        // },
-        async session({ session, token }) {
-            // if (session?.user) {
-            //     if (token?.user) {
-            //         session.user = { ...session?.user, ...token.user };
-            //     }
-            // }
-            return session;
-        },
     },
 });

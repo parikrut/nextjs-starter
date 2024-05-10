@@ -9,6 +9,10 @@ import {
 import { GetAllUsers } from "@/server/user.api";
 import { Paging } from "../ui/paging";
 import { VerifyUser } from "@/client/verifyUser";
+import { UnverifyUser } from "@/client/unverifyUser";
+import { Button } from "../ui/button";
+import Link from "next/link";
+import { ROUTES } from "@/lib/routes";
 
 
 export const UserList = async ({
@@ -32,22 +36,33 @@ export const UserList = async ({
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead>First Name</TableHead>
-                        <TableHead>Last Name</TableHead>
+                        <TableHead>Name</TableHead>
                         <TableHead>Email</TableHead>
                         <TableHead>Verified</TableHead>
+                        <TableHead>View</TableHead>
                         <TableHead>Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {users.data.map((user) => (
                         <TableRow key={user.id}>
-                            <TableCell>{user.firstName}</TableCell>
-                            <TableCell>{user.lastName}</TableCell>
+                            <TableCell>{user.name}</TableCell>
                             <TableCell>{user.email}</TableCell>
                             <TableCell>{user.emailVerified ? "Yes" : "No"}</TableCell>
                             <TableCell>
-                                <VerifyUser id={user.id} />
+                                <Button variant="link" asChild>
+                                    <Link href={`${ROUTES.dashboard}/${user.id}`}>
+                                        View profile
+                                    </Link>
+                                </Button>
+                            </TableCell>
+                            <TableCell>
+                                {
+                                    user.emailVerified ?
+                                        <UnverifyUser id={user.id} /> :
+                                        <VerifyUser id={user.id} />
+
+                                }
                             </TableCell>
                         </TableRow>
                     ))}
@@ -63,10 +78,10 @@ export const UserListSkeleton = () => {
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead>First Name</TableHead>
-                    <TableHead>Last Name</TableHead>
+                    <TableHead>Name</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Verified</TableHead>
+                    <TableHead>View</TableHead>
                     <TableHead>Actions</TableHead>
                 </TableRow>
             </TableHeader>
@@ -75,7 +90,7 @@ export const UserListSkeleton = () => {
                     <TableRow key={index}>
                         {[...Array(5)].map((_, index) => (
                             <TableCell key={index}>
-                                <div className="h-4 bg-gray-200 animate-pulse"></div>
+                                <div className="h-10 bg-gray-200 animate-pulse"></div>
                             </TableCell>
                         ))}
                     </TableRow>

@@ -15,3 +15,15 @@ export interface GetAllParams {
     page?: number = 1;
     limit?: number = 10;
 }
+
+export interface SearchParamsProps {
+    searchParams?: {
+        page?: string;
+    };
+}
+
+export interface IdParamsProps {
+    params: {
+        id: string;
+    };
+}

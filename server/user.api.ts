@@ -31,8 +31,8 @@ export const SignIn = async (data: Pick<User, | "email" | "password">): Promise<
     }
 }
 
-export const CreateUser = async (data: Pick<User, "firstName" | "lastName" | "email" | "password">): Promise<IResponse<User>> => {
-    const { firstName, lastName, email, password } = data;
+export const CreateUser = async (data: Pick<User, "name" | "email" | "password">): Promise<IResponse<User>> => {
+    const { name, email, password } = data;
     let salt = genSaltSync(10);
     let hash = hashSync(password, salt);
 
@@ -47,8 +47,7 @@ export const CreateUser = async (data: Pick<User, "firstName" | "lastName" | "em
     try {
         let user = await prisma.user.create({
             data: {
-                firstName,
-                lastName,
+                name,
                 email,
                 password: hash
             }
@@ -63,6 +62,28 @@ export const CreateUser = async (data: Pick<User, "firstName" | "lastName" | "em
         return {
             success: false,
             message: "Failed to create user"
+        }
+    }
+}
+
+export const UpdateUser = async (id: number, data: Partial<User>): Promise<IResponse<User>> => {
+    try {
+        let user = await prisma.user.update({
+            where: {
+                id
+            },
+            data
+        });
+
+        return {
+            success: true,
+            data: user
+        }
+    }
+    catch (err) {
+        return {
+            success: false,
+            message: "Failed to update user"
         }
     }
 }
@@ -89,6 +110,37 @@ export const GetUserByEmail = async (email: string): Promise<IResponse<User>> =>
     }
     catch (err) {
         console.log(err);
+        return {
+            success: false,
+            message: "Failed to get user"
+        }
+    }
+}
+
+export const GetUserById = async (id: string): Promise<IResponse<User>> => {
+    // Remove this line when you add the actual implementation
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: Number(id)
+            }
+        });
+
+        if (!user) {
+            return {
+                success: false,
+                message: "User not found"
+            }
+        }
+
+        return {
+            success: true,
+            data: user
+        }
+    }
+    catch (err) {
         return {
             success: false,
             message: "Failed to get user"

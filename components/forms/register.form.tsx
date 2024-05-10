@@ -8,11 +8,10 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { CreateUser } from "@/server/user.api"
 import { useToast } from "../ui/use-toast"
 import { ROUTES } from "@/lib/routes"
-import { redirect } from "next/navigation"
+import { redirect, useRouter } from "next/navigation"
 
 const formSchema = z.object({
-    firstName: z.string().min(2).max(50),
-    lastName: z.string().min(2).max(50),
+    name: z.string().min(2).max(50),
     email: z.string().email(),
     password: z.string().min(8),
 })
@@ -21,6 +20,7 @@ export const RegisterForm = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     })
+    const router = useRouter()
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         const response = await CreateUser(values);
@@ -30,7 +30,7 @@ export const RegisterForm = () => {
                 description: "You can now sign in",
                 variant: "success"
             });
-            redirect(ROUTES.login);
+            router.push(ROUTES.login);
         }
         else {
             toast({
@@ -42,34 +42,19 @@ export const RegisterForm = () => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <div className="flex flex-row gap-4">
-                    <FormField
-                        control={form.control}
-                        name="firstName"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>First name</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="John" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="lastName"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Last name</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="Doe" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                </div>
+                <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Name</FormLabel>
+                            <FormControl>
+                                <Input placeholder="John Doe" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 <FormField
                     control={form.control}
                     name="email"

@@ -8,15 +8,13 @@ async function seed() {
     const numUsers = 20; // Adjust this value to create more users
 
     for (let i = 0; i < numUsers; i++) {
-        const firstName = faker.internet.userName();
-        const lastName = faker.internet.userName();
+        const name = faker.internet.userName();
         const email = faker.internet.email();
         const password = faker.internet.password()
         try {
             await prisma.user.create({
                 data: {
-                    firstName,
-                    lastName,
+                    name,
                     email,
                     password,
                 },

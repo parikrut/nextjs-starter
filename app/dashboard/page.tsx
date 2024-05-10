@@ -6,13 +6,9 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import { SearchParamsProps } from "@/types/common";
 import { Suspense } from "react";
 
-interface SearchParamsProps {
-    searchParams?: {
-        page?: string;
-    };
-}
 
 export default async function page({
     searchParams
@@ -29,7 +25,7 @@ export default async function page({
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Suspense fallback={<UserListSkeleton />}>
+                    <Suspense fallback={<UserListSkeleton />} key={Math.random()}>
                         <UserList page={currentPage} />
                     </Suspense>
                 </CardContent>

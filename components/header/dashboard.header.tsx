@@ -62,7 +62,7 @@ export const DashboardHeader = () => {
             </Breadcrumb>
             <div className="flex flex-row gap-4 items-center">
                 <span>
-                    {session?.user?.firstName}
+                    {session?.user?.name}
                 </span>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>

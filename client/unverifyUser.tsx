@@ -6,25 +6,25 @@ import { useConfirm } from "@/context/alertDialogProvider";
 import { UpdateUser } from "@/server/user.api";
 import { useRouter } from "next/navigation";
 
-export const VerifyUser = ({ id }: { id: number }) => {
+export const UnverifyUser = ({ id }: { id: number }) => {
     const confirm = useConfirm();
     const { toast } = useToast()
     const router = useRouter();
 
-    const verifyUser = async () => {
+    const unverifyUser = async () => {
         const result = await confirm({
-            title: "Verify user?",
-            body: "This will verify the user and allow them to access the platform. Are you sure you want to proceed?",
+            title: "Unverify user?",
+            body: "This will unverift the user and restrict their access to the platform. Are you sure you want to proceed?",
             cancelButton: "Cancel",
-            actionButton: "Yes, Verify",
+            actionButton: "Yes, Unverify",
         })
 
         if (!result) return;
 
-        const response = await UpdateUser(id, { emailVerified: true });
+        const response = await UpdateUser(id, { emailVerified: false });
         if (response.success) {
             toast({
-                title: "User verified",
+                title: "User unverified",
                 variant: "success"
             });
             router.refresh();
@@ -39,8 +39,8 @@ export const VerifyUser = ({ id }: { id: number }) => {
 
     }
     return (
-        <Button variant="default" onClick={verifyUser}>
-            Verify User
+        <Button variant="destructive" onClick={unverifyUser}>
+            Unverify User
         </Button>
     )
 }
