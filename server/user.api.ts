@@ -67,6 +67,10 @@ export const CreateUser = async (data: Pick<User, "name" | "email" | "password">
 }
 
 export const UpdateUser = async (id: number, data: Partial<User>): Promise<IResponse<User>> => {
+    if (data.password) {
+        let salt = genSaltSync(10);
+        data.password = hashSync(data.password, salt);
+    }
     try {
         let user = await prisma.user.update({
             where: {
@@ -149,6 +153,9 @@ export const GetUserById = async (id: string): Promise<IResponse<User>> => {
 }
 
 export const GetUserByUniqueId = async (uniqueId: string): Promise<IResponse<User>> => {
+    // Remove this line when you add the actual implementation
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     try {
         const user = await prisma.user.findUnique({
             where: {

@@ -23,9 +23,11 @@ export const RegisterSection = () => {
                 <RegisterForm />
                 <div className="mt-4 text-center text-sm">
                     Already have an account?{" "}
-                    <Link href={ROUTES.login} className="underline">
-                        Sign in
-                    </Link>
+                    <Button variant="link" asChild>
+                        <Link href={ROUTES.login}>
+                            Sign in
+                        </Link>
+                    </Button>
                 </div>
             </CardContent>
         </Card>

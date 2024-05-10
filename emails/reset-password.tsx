@@ -32,7 +32,7 @@ export const ResetPasswordEmailTemplate = ({
             <Body style={main}>
                 <Container style={container}>
                     <Img
-                        src={`${baseUrl}/static/notion-logo.png`}
+                        src={`/public/images/notion-logo.png`}
                         width="40"
                         height="33"
                         alt="example logo"

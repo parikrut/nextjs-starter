@@ -10,7 +10,7 @@ export default function Page({ params }: IdParamsProps) {
 
     return (
         <main className="min-h-screen flex flex-col justify-center items-center">
-            <Suspense fallback={<UserCardSkeleton />}>
+            <Suspense fallback={<UserCardSkeleton />} key={Math.random()}>
                 <UserCard id={params?.id} />
             </Suspense>
         </main>

@@ -41,6 +41,7 @@
     - Contains all client component which has "use client" directive 
 - `component`
     - `cards` All resuable cards should be here with Skeleton state; <b>Must be Server components</b>
+    = `dialogs` All Dialog for servercomponents should be here; <b>Must be Server components</b>
     - `forms` All forms through out the application should be here; Must be Client components
     - `lists` All bulk data should be here with Skeleton state; <b>Must be Server components</b>
     - `sections` All pages should be break down into smaller chunks and sections should be place where chunks should be 
@@ -48,6 +49,9 @@
     - `ui` resuable small components should be kept here like Button, Card etc...
 - `context` 
     - All react context and provider should be here
+- `emails`
+    - All email template should be under this folder
+    - follow `/emails/reset-password.tsx` for reference
 - `lib`
     - All config files, routes and helper functions should be here
 - `server`
@@ -59,3 +63,13 @@
 ## Switch Database
 - Change `prisma/schema.prisma` provider
 - Change `.env` file
+
+
+Precommit hook
+Forgot password:
+
+- On Click it should popup dialog which says to enter email;
+- On Submit it will redirect
+- And with code it will ask user to enter new password on popup
+- code and password field
+- Define versions in package.json
