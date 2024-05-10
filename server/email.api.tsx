@@ -6,7 +6,7 @@ import { customAlphabet } from 'nanoid'
 import { ROUTES } from "@/lib/routes"
 import { prisma } from '@/lib/db';
 import { Resend } from 'resend';
-import ResetPasswordEmailTemplate from "@/emails/reset-password"
+import ResetPasswordEmailTemplate from "@/emails/emails/reset-password"
 
 const nanoid = customAlphabet('1234567890', 6)
 const resend = new Resend(process.env.RESEND_API_KEY);

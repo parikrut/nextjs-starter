@@ -12,9 +12,9 @@
     "prisma:studio": "prisma studio",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:seed": "ts-node prisma/seed.ts",
-    "email:build": "email build",
-    "email:dev": "email dev",
-    "email:export": "email export"
+    "email:build": "cd ./emails && yarn build",
+    "email:dev": "cd ./emails && yarn dev",
+    "email:export": "cd ./emails && yarn export"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.0.0",

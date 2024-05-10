@@ -79,7 +79,7 @@ export const DashboardHeader = () => {
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={async () => await SignOut()}>Logout</DropdownMenuItem>
+                        <DropdownMenuItem className="cursor-pointer" onClick={async () => await SignOut()}>Logout</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
