@@ -2,10 +2,7 @@ import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { compare } from 'bcrypt-ts';
 import { GetUserByEmail } from '@/server/user.api';
-import { User } from '@prisma/client';
 import { ROUTES } from './routes';
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { prisma } from '@/lib/db';
 
 export const {
     handlers,
@@ -18,8 +15,8 @@ export const {
         signIn: ROUTES.login,
         newUser: ROUTES.register,
     },
+    trustHost: true,
     session: { strategy: 'jwt' },
-    // adapter: PrismaAdapter(prisma),
     providers: [
         Credentials({
             async authorize({ email, password }: any) {

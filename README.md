@@ -63,13 +63,3 @@
 ## Switch Database
 - Change `prisma/schema.prisma` provider
 - Change `.env` file
-
-
-Precommit hook
-Forgot password:
-
-- On Click it should popup dialog which says to enter email;
-- On Submit it will redirect
-- And with code it will ask user to enter new password on popup
-- code and password field
-- Define versions in package.json

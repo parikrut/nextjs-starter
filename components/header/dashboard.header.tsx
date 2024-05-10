@@ -30,7 +30,6 @@ import React from "react"
 export const DashboardHeader = () => {
     const pathname = usePathname();
     const segments = pathname.split("/").filter((item) => item !== "");
-    //not working
     const { data: session } = useSession()
 
     return (
