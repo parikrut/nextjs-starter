@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/card"
 import { GetUserByUniqueId } from "@/server/user.api"
 import { ResetPasswordForm } from "../forms/resetPassword"
+import { Notification } from "../ui/notification";
 
 export const ResetPasswordSection = async ({
     uniqueId
@@ -16,7 +17,9 @@ export const ResetPasswordSection = async ({
     const user = await GetUserByUniqueId(uniqueId);
 
     if (!user.success) {
-        return <span>Something went wrong</span>
+        return <Notification variant="destructive" >
+            {user.message}
+        </Notification>
     }
 
     return (

@@ -13,6 +13,7 @@ import { UnverifyUser } from "@/client/unverifyUser";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
+import { Notification } from "../ui/notification";
 
 
 export const UserList = async ({
@@ -25,7 +26,9 @@ export const UserList = async ({
     })
 
     if (!users.success) {
-        return <span>Something went wrong</span>
+        return <Notification variant="destructive" >
+            {users.message}
+        </Notification>
     }
 
     if (users.data.length === 0) {

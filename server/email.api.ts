@@ -7,13 +7,14 @@ import { ROUTES } from "@/lib/routes"
 import { prisma } from '@/lib/db';
 import { Resend } from 'resend';
 import ResetPasswordEmailTemplate from "@/emails/emails/reset-password"
+import { withErrorHandling } from "@/lib/helper"
 
 const nanoid = customAlphabet('1234567890', 6)
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export const ResetPasswordEmail = async (data: Pick<User, | "email">): Promise<IResponse<User>> => {
-    const { email } = data;
-    try {
+export const ResetPasswordEmail = withErrorHandling(
+    async (data: Pick<User, | "email">): Promise<IResponse<User>> => {
+        const { email } = data;
         const user = await prisma.user.findUnique({
             where: {
                 email
@@ -21,10 +22,7 @@ export const ResetPasswordEmail = async (data: Pick<User, | "email">): Promise<I
         });
 
         if (!user) {
-            return {
-                success: false,
-                message: "User not found"
-            }
+            throw new Error("User not found")
         }
 
         const token = nanoid(6)
@@ -48,21 +46,11 @@ export const ResetPasswordEmail = async (data: Pick<User, | "email">): Promise<I
         });
 
         if (error) {
-            return {
-                success: false,
-                message: "Failed to send reset password email"
-            }
+            throw new Error("Failed to send reset password email")
         }
         return {
             success: true,
             data: user
         }
 
-
-    } catch (error) {
-        return {
-            success: false,
-            message: "Something went wrong. Please try again later."
-        }
-    }
-}
+    })

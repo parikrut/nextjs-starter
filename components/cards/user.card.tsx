@@ -10,12 +10,15 @@ import { GetUserById } from "@/server/user.api";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
+import { Notification } from "../ui/notification";
 
 export const UserCard = async ({ id }: { id: string }) => {
     const user = await GetUserById(id)
 
     if (!user.success) {
-        return <span>Something went wrong</span>
+        return <Notification variant="destructive" >
+            {user.message}
+        </Notification>
     }
 
     return (
