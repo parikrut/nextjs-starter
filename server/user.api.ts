@@ -1,10 +1,10 @@
 "use server"
 import { signIn, signOut } from '@/lib/auth';
-import { Roles } from '@/lib/authorization';
+import { Permissions, Roles } from '@/lib/authorization';
 import { prisma } from '@/lib/db';
-import { withErrorHandling } from '@/lib/helper';
+import { withAuthorization, withErrorHandling } from '@/lib/helper';
 import { ROUTES } from '@/lib/routes';
-import { GetAllParams, IResponse } from '@/types/common';
+import { GetAllParams, IPermissions, IResponse } from '@/types/common';
 import { User } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
 
@@ -64,7 +64,7 @@ export const CreateUser = withErrorHandling(
                         },
                         Role: {
                             connect: {
-                                name: Roles.USER
+                                name: Roles.ADMIN
                             }
                         }
                     }
@@ -74,7 +74,6 @@ export const CreateUser = withErrorHandling(
             }
         )
 
-        console.log(user);
         return {
             success: true,
             data: user
@@ -161,7 +160,7 @@ export const GetUserByUniqueId = withErrorHandling(
         }
     })
 
-export const GetAllUsers = withErrorHandling(
+export const GetAllUsers = withAuthorization(Permissions.GET_ALL_USERS as IPermissions,
     async ({ page = 1, limit = 10 }: GetAllParams): Promise<IResponse<User[]>> => {
         // Remove this line when you add the actual implementation
         await new Promise(resolve => setTimeout(resolve, 1000));

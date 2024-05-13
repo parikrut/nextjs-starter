@@ -1,3 +1,5 @@
+import { Permissions, Roles } from "@/lib/authorization";
+
 type SuccessResponse<Type> = {
     success: true;
     data: Type;
@@ -28,3 +30,6 @@ export interface IdParamsProps {
         id: string;
     };
 }
+
+export type IPermissions = keyof typeof Permissions;
+export type IRoles = keyof typeof Roles;
