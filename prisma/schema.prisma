@@ -8,12 +8,52 @@ datasource db {
 }
 
 model User {
-  id            Int      @id @default(autoincrement())
-  uniqueId      String   @unique @default(uuid())
+  id            Int        @id @default(autoincrement())
+  uniqueId      String     @unique @default(uuid())
   name          String
-  email         String   @unique
+  email         String     @unique
   password      String
   resetCode     String?
-  emailVerified Boolean  @default(false)
-  createdAt     DateTime @default(now())
+  emailVerified Boolean    @default(false)
+  createdAt     DateTime   @default(now())
+  UserRole      UserRole[]
+}
+
+model Permission {
+  id             Int              @id @default(autoincrement())
+  name           String           @unique
+  createdAt      DateTime         @default(now())
+  roleId         Int?
+  RolePermission RolePermission[]
+}
+
+model Role {
+  id             Int              @id @default(autoincrement())
+  name           String           @unique
+  description    String?
+  createdAt      DateTime         @default(now())
+  UserRole       UserRole[]
+  RolePermission RolePermission[]
+}
+
+model RolePermission {
+  id           Int      @id @default(autoincrement())
+  roleId       Int
+  permissionId Int
+  createdAt    DateTime @default(now())
+
+  Role       Role       @relation(fields: [roleId], references: [id])
+  Permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@unique([roleId, permissionId])
+}
+
+model UserRole {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  roleId    Int
+  createdAt DateTime @default(now())
+
+  User User @relation(fields: [userId], references: [id])
+  Role Role @relation(fields: [roleId], references: [id])
 }

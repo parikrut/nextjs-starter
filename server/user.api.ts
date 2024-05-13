@@ -1,5 +1,6 @@
 "use server"
 import { signIn, signOut } from '@/lib/auth';
+import { Roles } from '@/lib/authorization';
 import { prisma } from '@/lib/db';
 import { withErrorHandling } from '@/lib/helper';
 import { ROUTES } from '@/lib/routes';
@@ -45,14 +46,35 @@ export const CreateUser = withErrorHandling(
             throw new Error("User already exists");
         }
 
-        let user = await prisma.user.create({
-            data: {
-                name,
-                email,
-                password: hash
-            }
-        });
+        let user = await prisma.$transaction(
+            async (prisma) => {
+                const user = await prisma.user.create({
+                    data: {
+                        name,
+                        email,
+                        password: hash
+                    }
+                });
+                await prisma.userRole.create({
+                    data: {
+                        User: {
+                            connect: {
+                                id: user.id
+                            }
+                        },
+                        Role: {
+                            connect: {
+                                name: Roles.USER
+                            }
+                        }
+                    }
+                });
 
+                return user;
+            }
+        )
+
+        console.log(user);
         return {
             success: true,
             data: user
