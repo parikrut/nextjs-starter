@@ -64,7 +64,7 @@ export const CreateUser = withErrorHandling(
                         },
                         Role: {
                             connect: {
-                                name: Roles.ADMIN
+                                name: Roles.USER // Roles.ADMIN
                             }
                         }
                     }
