@@ -21,6 +21,16 @@ export default function Page() {
             Register
           </Link>
         </Button>
+        <Button asChild variant="ghost">
+          <Link href={ROUTES.universalForm}>
+            Unviversal form
+          </Link>
+        </Button>
+        <Button asChild variant="default">
+          <Link href={ROUTES.filters}>
+            Filters
+          </Link>
+        </Button>
       </div>
     </main>
   )

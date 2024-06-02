@@ -3,4 +3,6 @@ export const ROUTES = {
     login: '/login',
     register: '/register',
     resetPassword: '/reset-password',
+    universalForm: '/universal-form',
+    filters: '/filters',
 }
