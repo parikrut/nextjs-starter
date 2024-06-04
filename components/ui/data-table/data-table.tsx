@@ -40,14 +40,12 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[],
   pages: number,
-  searchBy: CustomTableState["searchBy"]
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   pages,
-  searchBy
 }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
@@ -60,7 +58,7 @@ export function DataTable<TData, TValue>({
     data,
     columns,
     state: {
-      searchBy,
+      // searchBy,
       columnVisibility,
       rowSelection,
       columnFilters,

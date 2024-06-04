@@ -27,39 +27,16 @@ export function DataTableToolbar<TData>({
   table,
 }: DataTableToolbarProps<TData>) {
   const columns = table.getAllColumns()
-  const [search, setSearch] = useState(columns[0].id)
   const pathname = usePathname()
   const router = useRouter()
-  console.log({
-    pathname
-  })
+
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <InputFilter
-          queryKey={search}
-          placeholder={`Search by ${search}`}
+          queryKey={"query"}
+          placeholder={`Search`}
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              className="capitalize"
-            >
-              <p className="flex flex-row items-center gap-0">
-                {search} &nbsp; <ArrowDown className="h-3 w-3" />
-              </p>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            {table.getState().searchBy.map((searchBy, key) => (
-              <DropdownMenuItem key={key} onClick={() => setSearch(searchBy)} className="capitalize">
-                {searchBy}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
       <div className="flex flex-row gap-2">
         <DataTableViewOptions table={table} />

@@ -221,12 +221,9 @@ export const GetUserByUniqueId = async (uniqueId: string): Promise<IResponse<Use
     }
 }
 
-export const GetAllUsers = async ({ page = 1, limit = 10, search }: GetAllParams<"name" | "id" | "email">): Promise<IResponse<User[]>> => {
+export const GetAllUsers = async ({ page = 1, limit = 10, query }: GetAllParams): Promise<IResponse<User[]>> => {
     try {
         await withAuthorization(Permissions.GET_ALL_USERS as IPermissions);
-        console.log({
-            search
-        })
         const users = await prisma.user.findMany({
             skip: (page - 1) * limit,
             take: limit,
@@ -234,15 +231,18 @@ export const GetAllUsers = async ({ page = 1, limit = 10, search }: GetAllParams
                 createdAt: 'desc'
             },
             where: {
-                name: {
-                    contains: search?.name ?? undefined,
-                },
-                id: {
-                    equals: search?.id ? Number(search?.id) : undefined,
-                },
-                email: {
-                    contains: search?.email ?? undefined,
-                }
+                OR: [
+                    {
+                        name: {
+                            contains: query ?? "",
+                        },
+                    },
+                    {
+                        email: {
+                            contains: query ?? "",
+                        }
+                    }
+                ]
             },
         });
 

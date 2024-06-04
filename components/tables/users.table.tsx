@@ -69,5 +69,5 @@ export const UserTable = async ({ users, pages }: { users: User[], pages: number
         },
     ]
 
-    return <DataTable data={users} columns={columns} pages={pages} searchBy={["id", "email", "name"]} />
+    return <DataTable data={users} columns={columns} pages={pages} />
 }

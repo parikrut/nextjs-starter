@@ -20,12 +20,12 @@ import { GetAllParams } from "@/types/common";
 export const UserList = async ({
     page,
     limit,
-    search
-}: GetAllParams<"name" | "id" | "email">) => {
+    query
+}: GetAllParams) => {
     const users = await GetAllUsers({
         page,
         limit,
-        search
+        query
     })
 
     if (!users.success) {

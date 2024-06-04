@@ -13,10 +13,10 @@ type ErrorResponse = {
 
 export type IResponse<Type> = SuccessResponse<Type> | ErrorResponse;
 
-export interface GetAllParams<Type> {
+export interface GetAllParams {
     page?: number = 1;
     limit?: number = 10;
-    search?: Record<Type | undefined, string | undefined>
+    query?: string
 }
 
 export interface SearchParamsProps {
