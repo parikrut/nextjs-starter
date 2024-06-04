@@ -30,7 +30,7 @@ export const SelectFilter = ({ queryKey, options, disabled, label, placeholder }
     }
     return (
         <>
-            <Label>{label}</Label>
+            <Label className="whitespace-nowrap">{label}</Label>
             <Select onValueChange={handleChange} value={currentQuery}>
                 <SelectTrigger disabled={disabled}>
                     <SelectValue placeholder={placeholder} />

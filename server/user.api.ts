@@ -2,7 +2,7 @@
 import { signIn, signOut } from '@/lib/auth';
 import { Permissions, Roles } from '@/lib/authorization';
 import { prisma } from '@/lib/db';
-import { withAuthorization, withErrorHandling } from '@/lib/helper';
+import { withAuthorization } from '@/lib/helper';
 import { ROUTES } from '@/lib/routes';
 import { GetAllParams, IPermissions, IResponse } from '@/types/common';
 import { User } from '@prisma/client';
@@ -35,8 +35,8 @@ export const SignIn = async (data: Pick<User, | "email" | "password">): Promise<
     }
 }
 
-export const CreateUser = withErrorHandling(
-    async (data: Pick<User, "name" | "email" | "password">): Promise<IResponse<User>> => {
+export const CreateUser = async (data: Pick<User, "name" | "email" | "password">): Promise<IResponse<User>> => {
+    try {
         const { name, email, password } = data;
         let salt = genSaltSync(10);
         let hash = hashSync(password, salt);
@@ -64,7 +64,7 @@ export const CreateUser = withErrorHandling(
                         },
                         Role: {
                             connect: {
-                                name: Roles.USER // Roles.ADMIN
+                                name: Roles.ADMIN // Roles.ADMIN
                             }
                         }
                     }
@@ -78,11 +78,23 @@ export const CreateUser = withErrorHandling(
             success: true,
             data: user
         }
+    } catch (error) {
+        if (error instanceof Error) {
+            return {
+                success: false,
+                message: error?.message ?? "An error occurred while processing your request."
+            };
+        }
+        return {
+            success: false,
+            message: "An error occurred while processing your request."
+        };
     }
-)
+}
 
-export const UpdateUser = withErrorHandling(
-    async (id: number, data: Partial<User>): Promise<IResponse<User>> => {
+
+export const UpdateUser = async (id: number, data: Partial<User>): Promise<IResponse<User>> => {
+    try {
         if (data.password) {
             let salt = genSaltSync(10);
             data.password = hashSync(data.password, salt);
@@ -98,11 +110,23 @@ export const UpdateUser = withErrorHandling(
             success: true,
             data: user
         }
+    } catch (error) {
+        if (error instanceof Error) {
+            return {
+                success: false,
+                message: error?.message ?? "An error occurred while processing your request."
+            };
+        }
+        return {
+            success: false,
+            message: "An error occurred while processing your request."
+        };
     }
-)
+}
 
-export const GetUserByEmail = withErrorHandling(
-    async (email: string): Promise<IResponse<User>> => {
+
+export const GetUserByEmail = async (email: string): Promise<IResponse<User>> => {
+    try {
         const user = await prisma.user.findUnique({
             where: {
                 email
@@ -117,10 +141,22 @@ export const GetUserByEmail = withErrorHandling(
             success: true,
             data: user
         }
-    })
+    } catch (error) {
+        if (error instanceof Error) {
+            return {
+                success: false,
+                message: error?.message ?? "An error occurred while processing your request."
+            };
+        }
+        return {
+            success: false,
+            message: "An error occurred while processing your request."
+        };
+    }
+}
 
-export const GetUserById = withErrorHandling(
-    async (id: string): Promise<IResponse<User>> => {
+export const GetUserById = async (id: string): Promise<IResponse<User>> => {
+    try {
         // Remove this line when you add the actual implementation
         await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -138,10 +174,23 @@ export const GetUserById = withErrorHandling(
             success: true,
             data: user
         }
-    })
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            return {
+                success: false,
+                message: error?.message ?? "An error occurred while processing your request."
+            };
+        }
+        return {
+            success: false,
+            message: "An error occurred while processing your request."
+        };
+    }
+}
 
-export const GetUserByUniqueId = withErrorHandling(
-    async (uniqueId: string): Promise<IResponse<User>> => {
+export const GetUserByUniqueId = async (uniqueId: string): Promise<IResponse<User>> => {
+    try {
         // Remove this line when you add the actual implementation
         await new Promise(resolve => setTimeout(resolve, 1000));
         const user = await prisma.user.findUnique({
@@ -158,19 +207,43 @@ export const GetUserByUniqueId = withErrorHandling(
             success: true,
             data: user
         }
-    })
+    } catch (error) {
+        if (error instanceof Error) {
+            return {
+                success: false,
+                message: error?.message ?? "An error occurred while processing your request."
+            };
+        }
+        return {
+            success: false,
+            message: "An error occurred while processing your request."
+        };
+    }
+}
 
-export const GetAllUsers = withAuthorization(Permissions.GET_ALL_USERS as IPermissions,
-    async ({ page = 1, limit = 10 }: GetAllParams): Promise<IResponse<User[]>> => {
-        // Remove this line when you add the actual implementation
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
+export const GetAllUsers = async ({ page = 1, limit = 10, search }: GetAllParams<"name" | "id" | "email">): Promise<IResponse<User[]>> => {
+    try {
+        await withAuthorization(Permissions.GET_ALL_USERS as IPermissions);
+        console.log({
+            search
+        })
         const users = await prisma.user.findMany({
             skip: (page - 1) * limit,
             take: limit,
             orderBy: {
                 createdAt: 'desc'
-            }
+            },
+            where: {
+                name: {
+                    contains: search?.name ?? undefined,
+                },
+                id: {
+                    equals: search?.id ? Number(search?.id) : undefined,
+                },
+                email: {
+                    contains: search?.email ?? undefined,
+                }
+            },
         });
 
         const count = await prisma.user.count();
@@ -180,4 +253,16 @@ export const GetAllUsers = withAuthorization(Permissions.GET_ALL_USERS as IPermi
             data: users,
             pages: Math.ceil(count / limit)
         }
-    })
+    } catch (error) {
+        if (error instanceof Error) {
+            return {
+                success: false,
+                message: error?.message ?? "An error occurred while processing your request."
+            };
+        }
+        return {
+            success: false,
+            message: "An error occurred while processing your request."
+        };
+    }
+}

@@ -1,53 +1,44 @@
+"use server"
 import { IPermissions, IResponse } from "@/types/common";
 import { auth } from "./auth";
 import { GetUserPermissions } from "@/server/authorization.api";
+import { prisma } from "./db";
 
-export const withErrorHandling = <T>(handler: (...args: any[]) => Promise<IResponse<T>>) => {
-    return async (...args: Parameters<typeof handler>): Promise<IResponse<T>> => {
-        try {
-            return await handler(...args);
-        } catch (error) {
-            console.error("Error occurred:", error);
-            if (error instanceof Error) {
-                return {
-                    success: false,
-                    message: error?.message ?? "An error occurred while processing your request."
-                };
-            }
-            return {
-                success: false,
-                message: "An error occurred while processing your request."
-            };
-        }
-    };
-};
+// Always wrap this functions with try catch block
+export const withAuthorization = async (permission: IPermissions): Promise<IResponse<any>> => {
+    const session = await auth();
+    if (!session?.user) {
+        throw new Error("User not authenticated");
+    }
 
-export const withAuthorization = <T>(permission: IPermissions, handler: (...args: any[]) => Promise<IResponse<T>>) => {
-    return async (...args: Parameters<typeof handler>): Promise<IResponse<T>> => {
-        try {
-            const session = await auth();
-            if (!session?.user) {
-                return {
-                    success: false,
-                    message: "Unauthorized"
-                };
-            }
+    const user = await prisma.userRole.findFirst({
+        where: {
+            AND: [
+                {
+                    User: {
+                        email: session.user.email
+                    }
+                },
+                {
+                    Role: {
+                        RolePermission: {
+                            some: {
+                                Permission: {
+                                    name: permission
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        },
+    });
 
-            await GetUserPermissions(session.user.email, permission);
-
-            return await handler(...args);
-        } catch (error) {
-            console.error("Error occurred:", error);
-            if (error instanceof Error) {
-                return {
-                    success: false,
-                    message: error?.message ?? "An error occurred while processing your request."
-                };
-            }
-            return {
-                success: false,
-                message: "An error occurred while processing your request."
-            };
-        }
-    };
+    if (!user) {
+        throw new Error("User does not have permission to perform this action.");
+    }
+    return {
+        success: true,
+        data: user
+    }
 };

@@ -14,15 +14,18 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
 import { Notification } from "../ui/notification";
-
+import { UserTable } from "../tables/users.table";
+import { GetAllParams } from "@/types/common";
 
 export const UserList = async ({
-    page
-}: {
-    page: number;
-}) => {
+    page,
+    limit,
+    search
+}: GetAllParams<"name" | "id" | "email">) => {
     const users = await GetAllUsers({
-        page
+        page,
+        limit,
+        search
     })
 
     if (!users.success) {
@@ -36,42 +39,7 @@ export const UserList = async ({
     }
     return (
         <>
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Email</TableHead>
-                        <TableHead>Verified</TableHead>
-                        <TableHead>View</TableHead>
-                        <TableHead>Actions</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {users.data.map((user) => (
-                        <TableRow key={user.id}>
-                            <TableCell>{user.name}</TableCell>
-                            <TableCell>{user.email}</TableCell>
-                            <TableCell>{user.emailVerified ? "Yes" : "No"}</TableCell>
-                            <TableCell>
-                                <Button variant="link" asChild>
-                                    <Link href={`${ROUTES.dashboard}/${user.id}`}>
-                                        View profile
-                                    </Link>
-                                </Button>
-                            </TableCell>
-                            <TableCell>
-                                {
-                                    user.emailVerified ?
-                                        <UnverifyUser id={user.id} /> :
-                                        <VerifyUser id={user.id} />
-
-                                }
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-            <Paging pageCount={users.pages || 1} />
+            <UserTable users={users.data} pages={users.pages || 1} />
         </>
     )
 }

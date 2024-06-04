@@ -68,7 +68,7 @@ export function Paging({ pageCount }: Readonly<PaginationProps>) {
                     <span className={buttonVariants({
                         variant: "ghost",
                     })} >
-                        {currentPage}
+                        Page {currentPage} of {pageCount}
                     </span>
                 </PaginationItem>
                 {currentPage >= pageCount ?
