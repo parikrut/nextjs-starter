@@ -16,7 +16,8 @@ export type IResponse<Type> = SuccessResponse<Type> | ErrorResponse;
 export interface GetAllParams {
     page?: number = 1;
     limit?: number = 10;
-    query?: string
+    query?: string;
+    sort?: Record<string, "asc" | "desc">;
 }
 
 export interface SearchParamsProps {
@@ -24,6 +25,7 @@ export interface SearchParamsProps {
         page?: string;
         query?: string;
         limit?: string;
+        sort?: string;
     };
 }
 

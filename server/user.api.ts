@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db';
 import { withAuthorization } from '@/lib/helper';
 import { ROUTES } from '@/lib/routes';
 import { GetAllParams, IPermissions, IResponse } from '@/types/common';
-import { User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
 
 // Do now wrap this function with withErrorHandling or add a try catch block
@@ -221,32 +221,37 @@ export const GetUserByUniqueId = async (uniqueId: string): Promise<IResponse<Use
     }
 }
 
-export const GetAllUsers = async ({ page = 1, limit = 10, query }: GetAllParams): Promise<IResponse<User[]>> => {
+export const GetAllUsers = async ({ page = 1, limit = 10, query, sort }: GetAllParams): Promise<IResponse<User[]>> => {
     try {
         await withAuthorization(Permissions.GET_ALL_USERS as IPermissions);
+
+        const queryOption: Prisma.UserWhereInput = {
+            OR: [
+                {
+                    name: {
+                        contains: query ?? "",
+                    },
+                },
+                {
+                    email: {
+                        contains: query ?? "",
+                    }
+                }
+            ],
+        }
+
         const users = await prisma.user.findMany({
             skip: (page - 1) * limit,
             take: limit,
             orderBy: {
-                createdAt: 'desc'
+                ...(Object.keys(sort || {}).length === 0 ? { createdAt: 'desc' } : sort)
             },
-            where: {
-                OR: [
-                    {
-                        name: {
-                            contains: query ?? "",
-                        },
-                    },
-                    {
-                        email: {
-                            contains: query ?? "",
-                        }
-                    }
-                ]
-            },
+            where: queryOption
         });
 
-        const count = await prisma.user.count();
+        const count = await prisma.user.count({
+            where: queryOption
+        });
 
         return {
             success: true,

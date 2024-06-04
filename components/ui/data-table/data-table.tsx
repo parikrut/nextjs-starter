@@ -63,6 +63,8 @@ export function DataTable<TData, TValue>({
       rowSelection,
       columnFilters,
     },
+    columnResizeMode: "onChange",
+    columnResizeDirection: 'ltr',
     pageCount: pages,
     manualPagination: true,
     manualSorting: true,
@@ -89,14 +91,33 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} colSpan={header.colSpan} className="">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    </TableHead>
+                    <>
+                      <TableHead
+                        key={header.id}
+                        colSpan={header.colSpan}
+                        className={`w-[${header.getSize()}px]`}>
+                        <div className="flex flex-row justify-between">
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                          {/* <Separator
+                            orientation="vertical"
+                            onMouseDown={header.getResizeHandler()}
+                            onTouchStart={header.getResizeHandler()}
+                            className={`h-10 w-1 resizer cursor-move 
+                        ${header.column.getIsResizing() ? 'isResizing' : ''}`}
+                            style={{
+                              transform: header.column.getIsResizing()
+                                ? `translateX(${table.getState().columnSizingInfo.deltaOffset}px)`
+                                : '',
+                            }}
+                          /> */}
+                        </div>
+                      </TableHead>
+                    </>
                   )
                 })}
               </TableRow>
@@ -110,7 +131,10 @@ export function DataTable<TData, TValue>({
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell
+                      key={cell.id}
+                      className={`w-[${cell.column.getSize()}px]`}
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()
