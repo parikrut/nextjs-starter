@@ -14,8 +14,9 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { ROUTES } from "@/lib/routes";
 import { Notification } from "../ui/notification";
-import { UserTable } from "../tables/users.table";
+import { DataUserTable } from "../tables/data-users.table";
 import { GetAllParams } from "@/types/common";
+import { EditableUsersTable } from "../tables/editable-users.table";
 
 export const UserList = async ({
     page,
@@ -41,7 +42,8 @@ export const UserList = async ({
     }
     return (
         <>
-            <UserTable users={users.data} pages={users.pages || 1} />
+            {/* <DataUserTable users={users.data} pages={users.pages || 1} /> */}
+            <EditableUsersTable users={users.data} pages={users.pages || 1} />
         </>
     )
 }

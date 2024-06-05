@@ -7,7 +7,7 @@ import { DataTable } from "../ui/data-table/data-table"
 import { GetAllUsers } from "@/server/user.api"
 import { Notification } from "../ui/notification"
 
-export const UserTable = async ({ users, pages }: { users: User[], pages: number }) => {
+export const DataUserTable = async ({ users, pages }: { users: User[], pages: number }) => {
     const columns: ColumnDef<User>[] = [
         {
             accessorKey: "id",
@@ -45,9 +45,6 @@ export const UserTable = async ({ users, pages }: { users: User[], pages: number
                     </div>
                 )
             },
-            filterFn: (row, id, value) => {
-                return value.includes(row.getValue(id))
-            },
         },
         {
             accessorKey: "createdAt",
@@ -62,9 +59,6 @@ export const UserTable = async ({ users, pages }: { users: User[], pages: number
                         </span>
                     </div>
                 )
-            },
-            filterFn: (row, id, value) => {
-                return value.includes(row.getValue(id))
             },
         },
     ]

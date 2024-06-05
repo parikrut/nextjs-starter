@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -15,6 +15,7 @@ model User {
   password      String
   resetCode     String?
   emailVerified Boolean    @default(false)
+  sortOrder     Int        @default(autoincrement())
   createdAt     DateTime   @default(now())
   UserRole      UserRole[]
 }

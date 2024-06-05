@@ -51,7 +51,7 @@ export const CreateUser = async (data: Pick<User, "name" | "email" | "password">
                 const user = await prisma.user.create({
                     data: {
                         name,
-                        email,
+                        email: email.toLowerCase(),
                         password: hash
                     }
                 });
@@ -127,9 +127,12 @@ export const UpdateUser = async (id: number, data: Partial<User>): Promise<IResp
 
 export const GetUserByEmail = async (email: string): Promise<IResponse<User>> => {
     try {
-        const user = await prisma.user.findUnique({
+        const user = await prisma.user.findFirst({
             where: {
-                email
+                email: {
+                    equals: email,
+                    mode: 'insensitive'
+                }
             }
         });
 
@@ -244,7 +247,7 @@ export const GetAllUsers = async ({ page = 1, limit = 10, query, sort }: GetAllP
             skip: (page - 1) * limit,
             take: limit,
             orderBy: {
-                ...(Object.keys(sort || {}).length === 0 ? { createdAt: 'desc' } : sort)
+                ...(Object.keys(sort || {}).length === 0 ? { sortOrder: 'desc' } : sort)
             },
             where: queryOption
         });
@@ -257,6 +260,86 @@ export const GetAllUsers = async ({ page = 1, limit = 10, query, sort }: GetAllP
             success: true,
             data: users,
             pages: Math.ceil(count / limit)
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            return {
+                success: false,
+                message: error?.message ?? "An error occurred while processing your request."
+            };
+        }
+        return {
+            success: false,
+            message: "An error occurred while processing your request."
+        };
+    }
+}
+
+export const UpdateManyUsers = async (users: User[]): Promise<IResponse<null>> => {
+    try {
+        await prisma.$transaction(
+            users.map(user => prisma.user.update({
+                where: {
+                    id: user.id
+                },
+                data: {
+                    ...user
+                }
+            }))
+        );
+        return {
+            success: true,
+            data: null
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            return {
+                success: false,
+                message: error?.message ?? "An error occurred while processing your request."
+            };
+        }
+        return {
+            success: false,
+            message: "An error occurred while processing your request."
+        };
+    }
+}
+
+export const SortUsers = async (user: User, position: number): Promise<IResponse<null>> => {
+    try {
+        const currentSortOrder = user.sortOrder;
+        const users = await prisma.user.findMany({
+            where: {
+                sortOrder: {
+                    gte: Math.min(currentSortOrder, position),
+                    lte: Math.max(currentSortOrder, position)
+                }
+            }
+        });
+
+        await prisma.$transaction(
+            users.map(user => prisma.user.update({
+                where: {
+                    id: user.id
+                },
+                data: {
+                    sortOrder: user.sortOrder + (currentSortOrder > position ? 1 : -1)
+                }
+            }))
+        );
+
+        await prisma.user.update({
+            where: {
+                id: user.id
+            },
+            data: {
+                sortOrder: position
+            }
+        });
+
+        return {
+            success: true,
+            data: null
         }
     } catch (error) {
         if (error instanceof Error) {

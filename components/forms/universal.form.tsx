@@ -29,7 +29,7 @@ import { SelectField } from "../fields/select.field"
 import { CheckboxField } from "../fields/checkbox.field"
 import { DatepickerField } from "../fields/datepicker.field"
 import { RadioField } from "../fields/radio.field"
-import { Switchield } from "../fields/switch.field"
+import { SwitchField } from "../fields/switch.field"
 
 const frameworksList = [
     {
@@ -63,7 +63,7 @@ const formSchema = z.object({
     multiSelect: z.array(z.string()),
     combobox: z.coerce.string(),
     checkbox: z.coerce.boolean(),
-    calender: z.coerce.date(),
+    calendar: z.coerce.date(),
     radio: z.coerce.string(),
     switch: z.coerce.boolean(),
 })
@@ -85,7 +85,7 @@ export const UniversalForm = () => {
             // ],
             // "combobox": "next.js",
             // "checkbox": true,
-            // "calender": new Date("2016-06-04T04:00:00.000Z"),
+            // "calendar": new Date("2016-06-04T04:00:00.000Z"),
             // "radio": "mentions",
             // "switch": false
         }
@@ -166,7 +166,7 @@ export const UniversalForm = () => {
                 <DatepickerField
                     control={form.control}
                     label="Date of birth"
-                    name="calender"
+                    name="calendar"
                     description="Receive emails about new products, features, and more."
                     placeholder="Pick a date"
                 />
@@ -181,7 +181,7 @@ export const UniversalForm = () => {
                         { label: "Nothing", value: "none" },
                     ]}
                 />
-                <Switchield
+                <SwitchField
                     control={form.control}
                     label="Marketing emails"
                     name="switch"

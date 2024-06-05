@@ -12,7 +12,7 @@ import { Switch } from "../ui/switch"
 interface Props extends FormFieldProps {
 }
 
-export const Switchield = ({
+export const SwitchField = ({
     control,
     label,
     name,

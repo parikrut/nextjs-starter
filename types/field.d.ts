@@ -15,3 +15,5 @@ export interface FilterFieldProps {
     disabled?: boolean;
     queryKey: string;
 }
+
+export type FieldTypes = "text" | "email" | "password" | "number" | "textarea" | "select" | "multi-select" | "search-select" | "checkbox" | "calendar" | "radio" | "switch";
