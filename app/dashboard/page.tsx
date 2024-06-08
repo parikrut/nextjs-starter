@@ -1,5 +1,4 @@
 import { UserList, UserListSkeleton } from "@/components/lists/user.list";
-import { UserTable } from "@/components/tables/users.table";
 import {
     Card,
     CardContent,

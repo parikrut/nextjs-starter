@@ -13,10 +13,11 @@ import { useRouter } from "next/navigation"
 import { ResetPasswordEmail } from "@/server/email.api"
 import { User } from "@prisma/client"
 import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "../ui/input-otp"
+import { InputField } from "../fields/input.field"
 
 const formSchema = z.object({
-    resetCode: z.string().min(6),
-    password: z.string().min(8),
+    resetCode: z.coerce.string().min(6),
+    password: z.coerce.string().min(8),
 })
 
 export const ResetPasswordForm = (user: User) => {
@@ -84,18 +85,12 @@ export const ResetPasswordForm = (user: User) => {
                         </FormItem>
                     )}
                 />
-                <FormField
+                <InputField
                     control={form.control}
                     name="password"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                                <Input placeholder="********" type="password" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+                    label="Password"
+                    type="password"
+                    placeholder="****"
                 />
                 <Button type="submit" className="w-full" loading={form?.formState?.isSubmitting}>
                     Reset Password

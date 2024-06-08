@@ -10,10 +10,11 @@ import { useToast } from "../ui/use-toast"
 import { ROUTES } from "@/lib/routes"
 import { signIn } from "@/lib/auth"
 import { useRouter } from "next/navigation"
+import { InputField } from "../fields/input.field"
 
 const formSchema = z.object({
-    email: z.string().email(),
-    password: z.string().min(8),
+    email: z.coerce.string().email(),
+    password: z.coerce.string().min(8),
 })
 export const LoginForm = () => {
     const { toast } = useToast()
@@ -42,31 +43,19 @@ export const LoginForm = () => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
+                <InputField
                     control={form.control}
                     name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                                <Input placeholder="John.doe@example.com" type="email" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+                    label="Email"
+                    type="email"
+                    placeholder="John.doe@example.com"
                 />
-                <FormField
+                <InputField
                     control={form.control}
                     name="password"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                                <Input placeholder="****" type="password" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+                    label="Password"
+                    type="password"
+                    placeholder="****"
                 />
                 <Button type="submit" className="w-full" loading={form?.formState?.isSubmitting}>
                     Sign in

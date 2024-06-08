@@ -226,7 +226,7 @@ export const GetUserByUniqueId = async (uniqueId: string): Promise<IResponse<Use
 
 export const GetAllUsers = async ({ page = 1, limit = 10, query, sort }: GetAllParams): Promise<IResponse<User[]>> => {
     try {
-        await withAuthorization(Permissions.GET_ALL_USERS as IPermissions);
+        // await withAuthorization(Permissions.GET_ALL_USERS as IPermissions);
 
         const queryOption: Prisma.UserWhereInput = {
             OR: [

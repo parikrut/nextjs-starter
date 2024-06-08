@@ -11,9 +11,10 @@ import { ROUTES } from "@/lib/routes"
 import { signIn } from "@/lib/auth"
 import { useRouter } from "next/navigation"
 import { ResetPasswordEmail } from "@/server/email.api"
+import { InputField } from "../fields/input.field"
 
 const formSchema = z.object({
-    email: z.string().email(),
+    email: z.coerce.string().email(),
 })
 
 export const ForgotPasswordForm = () => {
@@ -44,18 +45,12 @@ export const ForgotPasswordForm = () => {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                <FormField
+                <InputField
                     control={form.control}
                     name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                                <Input placeholder="John.doe@example.com" type="email" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+                    label="Email"
+                    type="email"
+                    placeholder="John.doe@example.com"
                 />
                 <Button type="submit" className="w-full" loading={form?.formState?.isSubmitting}>
                     Send Link
