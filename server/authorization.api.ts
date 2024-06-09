@@ -27,6 +27,9 @@ export const GetUserPermissions = async (email: string, permissionName: IPermiss
                     }
                 ]
             },
+            include: {
+                Role: true
+            }
         });
 
         if (!user) {

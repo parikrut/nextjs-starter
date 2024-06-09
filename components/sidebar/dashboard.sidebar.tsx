@@ -8,22 +8,21 @@ import { cn } from "@/lib/utils"
 import { NavigationLinks } from "../ui/navigation"
 import { LogoutForm } from "../forms/logout.form"
 import { useSidebar } from "@/hooks/useSidebar"
+import { usePathname } from "next/navigation"
+import { Roles } from "@/lib/authorization"
+import { ROUTE_LINKS } from "@/lib/links"
 
-const NavItems = [
-    {
-        title: "Dashboard",
-        link: "/dashboard",
-        icon: Home,
-    },
-    {
-        title: "Settings",
-        link: "/settings",
-        icon: Settings,
-    },
-]
 
 export function DashboardSidebar() {
     const { isOpen, toggle } = useSidebar();
+    const pathname = usePathname();
+    const currentRole = pathname.split("/")[2].toUpperCase();
+    const NavItems: {
+        title: string;
+        icon: any;
+        link: string;
+    }[] = ROUTE_LINKS.filter((link) => link.type === currentRole);
+
 
     return (
         <div
@@ -60,6 +59,14 @@ export function DashboardSidebar() {
 }
 
 export const DashboardMobileSidebar = () => {
+    const pathname = usePathname();
+    const currentRole = pathname.split("/")[2].toUpperCase();
+    const NavItems: {
+        title: string;
+        icon: any;
+        link: string;
+    }[] = ROUTE_LINKS.filter((link) => link.type === currentRole);
+
     return (
         <Sheet>
             <SheetTrigger asChild>

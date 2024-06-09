@@ -1,4 +1,3 @@
-import { UserList, UserListSkeleton } from "@/components/lists/user.list";
 import {
     Card,
     CardContent,
@@ -6,31 +5,34 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { SearchParamsProps } from "@/types/common";
-import { Suspense } from "react";
+import { Notification } from "@/components/ui/notification";
+import { auth } from "@/lib/auth";
+import { Permissions, Roles } from "@/lib/authorization";
+import { ROUTES } from "@/lib/routes";
+import { GetUserPermissions } from "@/server/authorization.api";
+import { IPermissions } from "@/types/common";
+import { redirect } from "next/navigation";
 
+export default async function page() {
+    const session = await auth();
+    const permission = session?.user && await GetUserPermissions(session.user.email, Permissions.GET_USER as IPermissions);
 
-export default async function page({ searchParams }: SearchParamsProps) {
-    const currentPage = Number(searchParams?.page) || 1;
-    const currentLimit = Number(searchParams?.limit) || 10;
-    const currentQuery = searchParams?.query;
-    const currentSort = searchParams?.sort;
-    const parseSort = JSON.parse(currentSort || "{}");
-    return (
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-            <Card x-chunk="dashboard-05-chunk-3">
-                <CardHeader className="px-7">
-                    <CardTitle>Users</CardTitle>
-                    <CardDescription>
-                        List of all users in the system
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <Suspense fallback={<UserListSkeleton />} key={Math.random()}>
-                        <UserList page={currentPage} limit={currentLimit} query={currentQuery} sort={parseSort} />
-                    </Suspense>
-                </CardContent>
-            </Card>
-        </main>
-    )
+    if (!permission) {
+        return <Notification variant="destructive">
+            Something went wrong
+        </Notification>
+    }
+    if (!permission.success) {
+        return <Notification variant="destructive" >
+            {permission.message}
+        </Notification>
+    }
+
+    if (permission.data.Role.name === Roles.ADMIN) {
+        return redirect(ROUTES.admin.dashboard)
+    }
+
+    if (permission.data.Role.name === Roles.USER) {
+        return redirect(ROUTES.user.dashboard)
+    }
 }

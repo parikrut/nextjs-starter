@@ -25,6 +25,7 @@ import { usePathname } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { SignOut } from "@/server/user.api"
 import React from "react"
+import { ROUTES } from "@/lib/routes"
 
 
 export const DashboardHeader = () => {
@@ -77,9 +78,11 @@ export const DashboardHeader = () => {
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="cursor-pointer" onClick={async () => await SignOut()}>Logout</DropdownMenuItem>
+                        <DropdownMenuLabel>
+                            <DropdownMenuItem>
+                                <Link href={ROUTES.admin.profile}>Profile</Link>
+                            </DropdownMenuItem>
+                        </DropdownMenuLabel>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
