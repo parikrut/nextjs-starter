@@ -1,77 +1,62 @@
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "@/components/ui/tooltip"
+"use client"
 import { ROUTES } from "@/lib/routes"
-import { Home, PanelLeft, Settings } from "lucide-react"
+import { ArrowLeft, Home, PanelLeft, Settings } from "lucide-react"
 import Link from "next/link"
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet"
 import { Button } from "../ui/button"
+import { cn } from "@/lib/utils"
+import { NavigationLinks } from "../ui/navigation"
+import { LogoutForm } from "../forms/logout.form"
+import { useSidebar } from "@/hooks/useSidebar"
 
-const Navigation = ({
-    icon,
-    label,
-    link,
-}: {
-    link: string
-    icon: React.ReactNode
-    label: string
-}) => (
-    <TooltipProvider>
-        <Tooltip>
-            <TooltipTrigger asChild>
-                <Link
-                    href={link}
-                    className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
-                >
-                    {icon}
-                    <span className="sr-only">{label}</span>
-                </Link>
-            </TooltipTrigger>
-            <TooltipContent side="right">{label}</TooltipContent>
-        </Tooltip>
-    </TooltipProvider>
-)
+const NavItems = [
+    {
+        title: "Dashboard",
+        link: "/dashboard",
+        icon: Home,
+    },
+    {
+        title: "Settings",
+        link: "/settings",
+        icon: Settings,
+    },
+]
 
-const NavigationMobile = ({
-    icon,
-    label,
-    link,
-}: {
-    link: string
-    icon: React.ReactNode
-    label: string
-}) => (
-    <Link
-        href={link}
-        className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-    >
-        {icon}
-        {label}
-    </Link>
-)
+export function DashboardSidebar() {
+    const { isOpen, toggle } = useSidebar();
 
-export const DashboardSidebar = () => {
     return (
-        <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
-            <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-                <Navigation
-                    link={ROUTES.dashboard}
-                    icon={<Home className="h-5 w-5" />}
-                    label="Home"
-                />
-            </nav>
-            <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-5">
-                <Navigation
-                    link={ROUTES.dashboard}
-                    icon={<Settings className="h-5 w-5" />}
-                    label="Settings"
-                />
-            </nav>
-        </aside>
-    )
+        <div
+            data-collapsed={isOpen}
+            className={`fixed hidden border-r bg-white md:block transition-all duration-300 ${isOpen ? 'w-80' : "w-20"}`}>
+            <div className="flex h-screen flex-col gap-2">
+                <div className="flex flex-row justify-between h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+                    {isOpen && <h5>Logo</h5>}
+                    <div className="relative">
+                        <ArrowLeft
+                            className={cn(
+                                "absolute cursor-pointer rounded-full border bg-white text-foreground",
+                                !isOpen && "rotate-180",
+                                !isOpen ? "-top-3" : "-top-3 left-3",
+                            )}
+                            onClick={toggle}
+                        />
+                    </div>
+                </div>
+                <div className="flex-1">
+                    <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+                        <NavigationLinks
+                            isCollapsed={!isOpen}
+                            links={NavItems}
+                        />
+                    </nav>
+                </div>
+                <div className="mt-auto p-2 border-t">
+                    <LogoutForm isCollapsed={!isOpen} />
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export const DashboardMobileSidebar = () => {
@@ -84,18 +69,22 @@ export const DashboardMobileSidebar = () => {
                 </Button>
             </SheetTrigger>
             <SheetContent side="left" className="sm:max-w-xs">
-                <nav className="grid gap-6 text-lg font-medium">
-                    <NavigationMobile
-                        link={ROUTES.dashboard}
-                        icon={<Home className="h-5 w-5" />}
-                        label="Home"
-                    />
-                    <NavigationMobile
-                        link={ROUTES.dashboard}
-                        icon={<Settings className="h-5 w-5" />}
-                        label="Settings"
-                    />
-                </nav>
+                <div className="flex h-full max-h-screen flex-col gap-2">
+                    <div className="flex flex-row justify-between h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
+                        <h5>Logo</h5>
+                    </div>
+                    <div className="flex-1">
+                        <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
+                            <NavigationLinks
+                                isCollapsed={false}
+                                links={NavItems}
+                            />
+                        </nav>
+                    </div>
+                    <div className="mt-auto p-2 border-t">
+                        <LogoutForm isCollapsed={false} />
+                    </div>
+                </div>
             </SheetContent>
         </Sheet>
     )

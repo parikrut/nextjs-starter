@@ -65,6 +65,5 @@
 - Change `.env` file
 
 
-
-Create a search field that gives ASYNC result
-comma seperated search with input
+fix sidebar sticky property
+Enable user profile,
