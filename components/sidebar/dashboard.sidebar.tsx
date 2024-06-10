@@ -6,17 +6,18 @@ import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet"
 import { Button } from "../ui/button"
 import { cn } from "@/lib/utils"
 import { NavigationLinks } from "../ui/navigation"
-import { LogoutForm } from "../forms/logout.form"
+import { LogoutForm } from "../forms/user/logout.form"
 import { useSidebar } from "@/hooks/useSidebar"
 import { usePathname } from "next/navigation"
 import { Roles } from "@/lib/authorization"
 import { ROUTE_LINKS } from "@/lib/links"
+import { User } from "@prisma/client"
 
 
-export function DashboardSidebar() {
+export function DashboardSidebar({ user }: { user: User }) {
     const { isOpen, toggle } = useSidebar();
     const pathname = usePathname();
-    const currentRole = pathname.split("/")[2].toUpperCase();
+    const currentRole = pathname.split("/")[2]?.toUpperCase();
     const NavItems: {
         title: string;
         icon: any;

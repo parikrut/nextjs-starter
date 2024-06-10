@@ -6,7 +6,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 import { GetUserByUniqueId } from "@/server/user.api"
-import { ResetPasswordForm } from "../forms/resetPassword"
+import { ResetPasswordForm } from "../forms/user/resetPassword"
 import { Notification } from "../ui/notification";
 
 export const ResetPasswordSection = async ({

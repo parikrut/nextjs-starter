@@ -3,7 +3,7 @@ import { CheckboxFilter } from "@/components/filters/checkbox.filter";
 import { RadioFilter } from "@/components/filters/radio.filter";
 import { SearchFilter } from "@/components/filters/search.filter";
 import { SelectFilter } from "@/components/filters/select.filter";
-import { UniversalForm } from "@/components/forms/universal.form";
+import { UniversalForm } from "@/components/forms/user/universal.form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { GetAllUsers } from "@/server/user.api";

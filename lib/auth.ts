@@ -38,6 +38,9 @@ export const {
                 if (isLoggedIn) return true;
                 return false; // Redirect unauthenticated users to login page
             } else if (isLoggedIn) {
+                if (nextUrl.pathname === ROUTES.resetPassword) {
+                    return true;
+                }
                 return Response.redirect(new URL(ROUTES.dashboard, nextUrl));
             }
 

@@ -17,7 +17,7 @@ export default async function page({ searchParams }: SearchParamsProps) {
     const currentSort = searchParams?.sort;
     const parseSort = JSON.parse(currentSort || "{}");
     return (
-        <>
+        <Card className="m-5">
             <CardHeader>
                 <CardTitle>Users</CardTitle>
                 <CardDescription>
@@ -29,6 +29,6 @@ export default async function page({ searchParams }: SearchParamsProps) {
                     <UserList page={currentPage} limit={currentLimit} query={currentQuery} sort={parseSort} />
                 </Suspense>
             </CardContent>
-        </>
+        </Card>
     )
 }

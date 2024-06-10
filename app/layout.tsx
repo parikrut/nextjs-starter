@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Karla } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Providers } from "@/context/providers";
 import { auth } from "@/lib/auth";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Karla({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",

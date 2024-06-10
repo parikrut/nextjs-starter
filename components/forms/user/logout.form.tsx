@@ -1,7 +1,7 @@
 "use client"
 import { useForm } from "react-hook-form"
-import { Form } from "../ui/form"
-import { Button } from "../ui/button"
+import { Form } from "../../ui/form"
+import { Button } from "../../ui/button"
 import { LogOut } from "lucide-react"
 import { SignOut } from "@/server/user.api"
 

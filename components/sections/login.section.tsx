@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card"
 import Link from "next/link"
 import { ROUTES } from "@/lib/routes"
-import { LoginForm } from "../forms/login.form"
+import { LoginForm } from "../forms/user/login.form"
 import { Button } from "../ui/button"
 import { ForgotPasswordDialog } from "../dialogs/forgotPassword.dialog"
 

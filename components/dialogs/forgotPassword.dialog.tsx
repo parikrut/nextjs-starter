@@ -8,7 +8,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { ForgotPasswordForm } from "../forms/forgotPassword.form"
+import { ForgotPasswordForm } from "../forms/user/forgotPassword.form"
 
 export const ForgotPasswordDialog = () => {
     return (

@@ -65,5 +65,4 @@
 - Change `.env` file
 
 
-fix sidebar sticky property
 Enable user profile,

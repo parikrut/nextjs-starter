@@ -26,12 +26,12 @@ import { useSession } from "next-auth/react"
 import { SignOut } from "@/server/user.api"
 import React from "react"
 import { ROUTES } from "@/lib/routes"
+import { User } from "@prisma/client"
 
 
-export const DashboardHeader = () => {
+export const DashboardHeader = ({ user }: { user: User }) => {
     const pathname = usePathname();
     const segments = pathname.split("/").filter((item) => item !== "");
-    const { data: session } = useSession()
 
     return (
         <header className="flex h-14 items-center gap-4 border-b bg-background px-4 justify-between lg:h-[60px] lg:px-6">
@@ -62,7 +62,7 @@ export const DashboardHeader = () => {
             </Breadcrumb>
             <div className="flex flex-row gap-4 items-center">
                 <span>
-                    {session?.user?.name}
+                    {user?.name}
                 </span>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>

@@ -5,7 +5,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import { RegisterForm } from "../forms/register.form"
+import { RegisterForm } from "../forms/user/register.form"
 import Link from "next/link"
 import { ROUTES } from "@/lib/routes"
 import { Button } from "../ui/button"

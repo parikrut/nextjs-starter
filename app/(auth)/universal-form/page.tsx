@@ -1,4 +1,4 @@
-import { UniversalForm } from "@/components/forms/universal.form";
+import { UniversalForm } from "@/components/forms/user/universal.form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Page() {

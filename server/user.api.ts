@@ -126,6 +126,7 @@ export const UpdateUser = async (id: number, data: Partial<User>): Promise<IResp
 
 
 export const GetUserByEmail = async (email: string): Promise<IResponse<User>> => {
+
     try {
         const user = await prisma.user.findFirst({
             where: {
