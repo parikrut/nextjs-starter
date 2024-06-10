@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm, Control } from "react-hook-form";
 import { z, ZodSchema } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,6 +29,7 @@ export interface ColumnConfig<T> {
     options?: { label: string, value: any }[];  // For select, radio
     disabled?: boolean | undefined;
     colSpan?: number;
+    component?: React.ReactNode;
 }
 
 interface SortableTableProps<T> {
@@ -68,6 +69,8 @@ const renderTableCell = (control: Control, rowIndex: number, column: ColumnConfi
             return <RadioField control={control} name={name} options={column.options!} disabled={column.disabled} />;
         case 'switch':
             return <SwitchField control={control} name={name} disabled={column.disabled} />;
+        case 'custom':
+            return column.component ? column.component : null;
         default:
             return null;
 
@@ -93,7 +96,7 @@ const SortableRow = <T extends { id: number; sortOrder: number }>({
             style={{ transform: CSS.Transform.toString(transform), transition }}
         >
             <TableCell ref={setNodeRef} {...attributes} {...listeners}>
-                <GripVertical className="cursor-move mt-3" />
+                <GripVertical className="cursor-move" />
             </TableCell>
             {columns.map((column, index) => (
                 <TableCell key={index} colSpan={column.colSpan || 1}>

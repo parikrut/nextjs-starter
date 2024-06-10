@@ -4,6 +4,7 @@ import { ColumnConfig, EditableTable } from "../ui/editable-table/editable-table
 import { z } from "zod";
 import { SortUsers, UpdateManyUsers } from "@/server/user.api";
 import { FieldTypes } from "@/types/field";
+import { ForgotPasswordDialog } from "../dialogs/forgotPassword.dialog";
 
 const userSchema = z.object({
     data: z.array(
@@ -23,6 +24,7 @@ const userColumns: ColumnConfig<User>[] = [
     { name: "email", label: "Email", type: "email", disabled: true },
     { name: "createdAt", label: "Joined on", type: "calendar", disabled: true },
     { name: "sortOrder", label: "Order", type: "number", disabled: true },
+    // { name: "id", label: "Action", type: "custom", component: <ForgotPasswordDialog /> }
 ];
 
 

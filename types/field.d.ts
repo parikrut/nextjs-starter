@@ -16,4 +16,4 @@ export interface FilterFieldProps {
     queryKey: string;
 }
 
-export type FieldTypes = "text" | "email" | "password" | "number" | "textarea" | "select" | "multi-select" | "search-select" | "checkbox" | "calendar" | "radio" | "switch";
+export type FieldTypes = "text" | "email" | "password" | "number" | "textarea" | "select" | "multi-select" | "search-select" | "checkbox" | "calendar" | "radio" | "switch" | "custom";
